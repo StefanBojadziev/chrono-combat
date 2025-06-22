@@ -17,46 +17,16 @@ export default class MultiPlayerScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.audio(
-      "fightingMusic",
-      "../../public/assets/audio/sounds/fightingMusic.mp3"
-    );
-    this.load.audio(
-      "gameStartFight",
-      "../../public/assets/audio/sounds/gameStartFight.mp3"
-    );
-    this.load.audio(
-      "fightingMusic",
-      "../../public/assets/audio/sounds/fightingMusic.mp3"
-    );
-    this.load.audio(
-      "gameStartFight",
-      "../../public/assets/audio/sounds/gameStartFight.mp3"
-    );
-    this.load.audio(
-      "gameOverSound",
-      "../../public/assets/audio/sounds/gameOverSound.mp3"
-    );
-    this.load.audio(
-      "gameOverVoice",
-      "../../public/assets/audio/sounds/gameOverVoice.mp3"
-    );
-    this.load.audio(
-      "fallSound",
-      "../../public/assets/audio/sounds/fallSound.mp3"
-    );
-    this.load.audio(
-      "attackSound",
-      "../../public/assets/audio/sounds/attackSound.mp3"
-    );
-    this.load.audio(
-      "hitSound",
-      "../../public/assets/audio/sounds/hitSound.mp3"
-    );
-    this.load.audio(
-      "menuPress",
-      "../../public/assets/audio/sounds/menuPress.mp3"
-    );
+    this.load.audio("fightingMusic", "assets/audio/sounds/fightingMusic.mp3");
+    this.load.audio("gameStartFight", "assets/audio/sounds/gameStartFight.mp3");
+    this.load.audio("fightingMusic", "assets/audio/sounds/fightingMusic.mp3");
+    this.load.audio("gameStartFight", "assets/audio/sounds/gameStartFight.mp3");
+    this.load.audio("gameOverSound", "assets/audio/sounds/gameOverSound.mp3");
+    this.load.audio("gameOverVoice", "assets/audio/sounds/gameOverVoice.mp3");
+    this.load.audio("fallSound", "assets/audio/sounds/fallSound.mp3");
+    this.load.audio("attackSound", "assets/audio/sounds/attackSound.mp3");
+    this.load.audio("hitSound", "assets/audio/sounds/hitSound.mp3");
+    this.load.audio("menuPress", "assets/audio/sounds/menuPress.mp3");
   }
 
   init(data) {

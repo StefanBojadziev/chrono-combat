@@ -8,19 +8,13 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("titleImage", "../../public/assets/titleImage.png");
+    this.load.image("titleImage", "assets/titleImage.png");
     this.load.image(
       "mainMenuBackground",
-      "../../public/assets/backgrounds/mainMenu/background2.png"
+      "assets/backgrounds/mainMenu/background2.png"
     );
-    this.load.audio(
-      "menuMusic",
-      "../../public/assets/audio/sounds/menuMusic.mp3"
-    );
-    this.load.audio(
-      "menuPress",
-      "../../public/assets/audio/sounds/menuPress.mp3"
-    );
+    this.load.audio("menuMusic", "assets/audio/sounds/menuMusic.mp3");
+    this.load.audio("menuPress", "assets/audio/sounds/menuPress.mp3");
   }
 
   create() {
