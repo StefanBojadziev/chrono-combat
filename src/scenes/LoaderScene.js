@@ -13,7 +13,14 @@ export default class LoaderScene extends Phaser.Scene {
   }
 
   preload() {
-    this.createLoadingBar();
+    this.load.spritesheet("loadingAnimation", "assets/LoadingAnimation.png", {
+      frameWidth: 1024,
+      frameHeight: 1024,
+    });
+    this.load.image(
+      "mainMenuBackground",
+      "assets/backgrounds/mainMenu/background2.png"
+    );
 
     this.load.image(
       "background",
@@ -349,109 +356,63 @@ export default class LoaderScene extends Phaser.Scene {
       frameWidth: 140,
       frameHeight: 140,
     });
-
-    // Track loading progress
-    this.load.on("progress", this.updateProgressBar, this);
-  }
-
-  createLoadingBar() {
-    // Add background
-    this.add
-      .rectangle(
-        0,
-        0,
-        this.cameras.main.width,
-        this.cameras.main.height,
-        0x000000
-      )
-      .setOrigin(0, 0);
-
-    // Add loading text
-    this.loadingText = this.add
-      .text(
-        this.cameras.main.width / 2,
-        this.cameras.main.height / 2 - 50,
-        "Loading...",
-        { font: "24px Arial", fill: "#ffffff" }
-      )
-      .setOrigin(0.5);
-
-    // Add percentage text
-    this.percentText = this.add
-      .text(
-        this.cameras.main.width / 2,
-        this.cameras.main.height / 2 + 50,
-        "0%",
-        { font: "18px Arial", fill: "#ffffff" }
-      )
-      .setOrigin(0.5);
-
-    // Create progress bar container
-    const barWidth = 400;
-    const barHeight = 30;
-    const x = this.cameras.main.width / 2 - barWidth / 2;
-    const y = this.cameras.main.height / 2;
-
-    // Progress bar background
-    this.progressBarBg = this.add
-      .rectangle(x, y, barWidth, barHeight, 0x555555)
-      .setOrigin(0, 0.5);
-
-    // Progress bar fill
-    this.progressBarFill = this.add
-      .rectangle(x, y, 0, barHeight, 0x00ff00)
-      .setOrigin(0, 0.5);
-  }
-
-  updateProgressBar(value) {
-    // Update progress bar width
-    const barWidth = 400;
-    const newWidth = value * barWidth;
-
-    // Animate the progress bar
-    this.tweens.add({
-      targets: this.progressBarFill,
-      width: newWidth,
-      duration: 200,
-      ease: "Power1",
-    });
-
-    // Update percentage text
-    const percent = Math.round(value * 100);
-    this.percentText.setText(`${percent}%`);
-
-    // Change color as loading progresses
-    if (percent < 30) {
-      this.progressBarFill.setFillStyle(0xff0000); // Red
-    } else if (percent < 70) {
-      this.progressBarFill.setFillStyle(0xffff00); // Yellow
-    } else {
-      this.progressBarFill.setFillStyle(0x00ff00); // Green
-    }
   }
 
   create() {
+    this.add
+      .image(0, 0, "mainMenuBackground")
+      .setOrigin(0)
+      .setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+    this.loadingAnimPlayedOnce = false;
+    this.assetsLoaded = true;
+    if (!this.scene.manager.getScene("PauseScene")) {
+      this.scene.add("PauseScene", PauseScene);
+    }
+    this.anims.create({
+      key: "loadingAnim",
+      frames: this.anims.generateFrameNumbers("loadingAnimation", {
+        start: 0,
+        end: 9,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+    this.loadingSprite = this.add
+      .sprite(
+        this.cameras.main.centerX,
+        this.cameras.main.centerY,
+        "loadingAnimation"
+      )
+      .play("loadingAnim")
+      .setScale(0.4, 0.4);
+    showHealthBarsAndTimer(false);
+
+    this.scene.stop("ModeSelectScene");
+    this.loadingSprite.on("animationrepeat", () => {
+      this.loadingAnimPlayedOnce = true;
+    });
+    this.time.addEvent({
+      delay: 100,
+      loop: true,
+      callback: () => {
+        if (this.assetsLoaded && this.loadingAnimPlayedOnce) {
+          this.finishLoading();
+        }
+      },
+    });
+  }
+  finishLoading() {
     if (!this.scene.manager.getScene("PauseScene")) {
       this.scene.add("PauseScene", PauseScene);
     }
 
     showHealthBarsAndTimer(false);
-    this.add
-      .image(0, 0, "mainMenuBackground")
-      .setOrigin(0)
-      .setDisplaySize(this.cameras.main.width, this.cameras.main.height);
-    this.scene.stop("ModeSelectScene");
-    // Complete any final setup
-    this.loadingText.setText("Loading complete!");
-    // Add a slight delay before switching scenes for a smoother transition
-    this.time.delayedCall(500, () => {
-      this.scene.add(
-        "CharacterSelection",
-        CharacterSelection,
-        true,
-        this.selectedMode
-      );
-      this.scene.stop("LoaderScene");
-    });
+    this.scene.add(
+      "CharacterSelection",
+      CharacterSelection,
+      true,
+      this.selectedMode
+    );
+    this.scene.stop("LoaderScene");
   }
 }

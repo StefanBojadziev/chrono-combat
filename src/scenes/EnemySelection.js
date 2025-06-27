@@ -135,6 +135,7 @@ export default class EnemySelection extends Phaser.Scene {
     const config = FighterConfig[selected];
     if (config) {
       this.preview.setScale(config.size.scale || 2);
+      this.preview.setY(250 - config.offset.y);
       this.statsText.setText([
         `Health: ${config.health}`,
         `Damage: ${config.damage}`,
